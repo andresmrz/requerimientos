@@ -1,0 +1,8 @@
+Options All -Indexes
+ErrorDocument 403 http://localhost/calidad/error/403.html
+ErrorDocument 404 http://localhost/calidad/error/404.html
+
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php
