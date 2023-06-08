@@ -24,7 +24,7 @@
 			{
 				case 'index':
 				{
-					if($permisos == 1)
+					if($permisos == 1 || $permisos == 3)
 					{
 						$view_opciones_campo->lista = $opciones_campo->getData();
 
@@ -36,7 +36,7 @@
 
 				case 'ver':
 				{
-					if($permisos == 1) 
+					if($permisos == 1 || $permisos == 3) 
 					{
 						$view_opciones_campo->id = $_POST['id'];
 
@@ -52,7 +52,7 @@
 
 				case 'crear':
 				{
-					if($permisos == 1)
+					if($permisos == 1 || $permisos == 3)
 					{
 						$template = '../../vista/templates/opciones/campo/crear.php';
 					}
@@ -62,7 +62,7 @@
 
 				case 'editar':
 				{
-					if($permisos == 1) 
+					if($permisos == 1 || $permisos == 3) 
 					{
 						$view_opciones_campo->id = $_POST['id'];
 

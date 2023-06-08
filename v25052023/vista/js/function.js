@@ -147,6 +147,41 @@ function perfil_cargarIndex(cargar)
     }
 }
 
+function requerimientos_cargarIndex(cargar)
+{
+    var ejecutar = ()=>
+    {
+        $('#contenedor-ventanas').load('../../controlador/requerimientos/indexRequerimientos.php',{action:'index'},function()
+        {
+            var datosTabla = document.querySelectorAll('#requerimientos-tabla tbody tr');
+            $('#requerimientos-tabla-total').val(datosTabla.length);
+
+            if(datosTabla.length == 0)
+            {
+                var datosTabla = document.querySelectorAll('#requerimientos-tabla thead');
+                datosTabla[0].innerHTML += '<th class="text-center" colspan="8">Sin resultados</th>';
+            }
+
+            mostrar('contenedor-ventanas');
+            verMenu();
+
+            if(cargar == undefined)
+            {
+                cargando_ocultar();
+            }
+        });
+    };
+
+    if(cargar == undefined)
+    {
+        cargando_done('Cargando datos',true,ejecutar);
+    }
+    else
+    {
+        ejecutar();
+    }
+}
+
 function opciones_sistemas_cargarIndex(cargar)
 {
     var ejecutar = ()=>

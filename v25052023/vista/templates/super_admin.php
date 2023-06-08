@@ -128,16 +128,16 @@
 
                     <li onclick="inicio()"><a href="javascript: void(0)" class="menu-enfocar"><b><span class="menu-pc-ocultar"><i class="fas fa-home"></i>&nbsp;&nbsp;&nbsp;</span>Inicio</b></a><span class="menu-texto-oculto">Inicio</span></li>
 
-                    <li onclick="//almacen_cargarIndex()"><a href="?v=almacen_index" class="menu-enfocar"><b><span class="menu-pc-ocultar"><i class="fas fa-chart-column"></i>&nbsp;&nbsp;&nbsp;</span>Almacen</b></a><span class="menu-texto-oculto">Almacen</span></li>
+                    <li onclick="//requerimientos_cargarIndex()"><a href="?v=requerimientos_index" class="menu-enfocar"><b><span class="menu-pc-ocultar"><i class="fas fa-chart-column"></i>&nbsp;&nbsp;&nbsp;</span>Requerimientos</b></a><span class="menu-texto-oculto">Requerimientos</span></li>
 
                     <li class="dropdown" style="vertical-align: middle;">
 
                         <a href="javascript: void(0)" class="dropdown-toggle menu-enfocar" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><b><span class="menu-pc-ocultar"><i class="fas fa-cogs"></i>&nbsp;&nbsp;&nbsp;</span>Administrar</b></a>
                         <span class="menu-texto-oculto"><b><span class="menu-pc-ocultar"><i class="fas fa-cogs"></i>&nbsp;&nbsp;&nbsp;</span>Administrar</b></span>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                            <li onclick="//opciones_sistemas_cargarIndex()"><a href="?v=opciones_sistemas_index"><span class="fas fa-user-gear color-iconos"></span>&nbsp;&nbsp;&nbsp;<b>Opciones Sistemas</b></a></li>
-                            <li onclick="//opciones_campo_cargarIndex()"><a href="?v=opciones_campo_index"><span class="fas fa-user-gear color-iconos"></span>&nbsp;&nbsp;&nbsp;<b>Opciones Campo</b></a></li>
-                            <li onclick="//opciones_puntos_atencion_cargarIndex()"><a href="?v=opciones_puntos_atencion_index"><span class="fas fa-user-gear color-iconos"></span>&nbsp;&nbsp;&nbsp;<b>Opciones Puntos de Atención</b></a></li>
+                            <li onclick="//opciones_sistemas_cargarIndex()"><a href="?v=opciones_sistemas_index"><span class="fas fa-list color-iconos"></span>&nbsp;&nbsp;&nbsp;<b>Opciones Sistemas</b></a></li>
+                            <li onclick="//opciones_campo_cargarIndex()"><a href="?v=opciones_campo_index"><span class="fas fa-list color-iconos"></span>&nbsp;&nbsp;&nbsp;<b>Opciones Campo</b></a></li>
+                            <li onclick="//opciones_puntos_atencion_cargarIndex()"><a href="?v=opciones_puntos_atencion_index"><span class="fas fa-list color-iconos"></span>&nbsp;&nbsp;&nbsp;<b>Opciones Puntos de Atención</b></a></li>
                             <li onclick="//usuarios_permisos_cargarIndex()"><a href="?v=usuarios_permisos_index"><span class="fas fa-user-gear color-iconos"></span>&nbsp;&nbsp;&nbsp;<b>Permisos</b></a></li>
                         </ul>
                     </li>

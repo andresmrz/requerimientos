@@ -24,7 +24,7 @@
 			{
 				case 'index':
 				{
-					if($permisos == 1)
+					if($permisos == 1 || $permisos == 4)
 					{
 						$view_opciones_puntos_atencion->lista = $opciones_puntos_atencion->getData();
 
@@ -36,7 +36,7 @@
 
 				case 'ver':
 				{
-					if($permisos == 1) 
+					if($permisos == 1 || $permisos == 4) 
 					{
 						$view_opciones_puntos_atencion->id = $_POST['id'];
 
@@ -52,7 +52,7 @@
 
 				case 'crear':
 				{
-					if($permisos == 1)
+					if($permisos == 1 || $permisos == 4)
 					{
 						$template = '../../vista/templates/opciones/puntos_atencion/crear.php';
 					}
@@ -62,7 +62,7 @@
 
 				case 'editar':
 				{
-					if($permisos == 1) 
+					if($permisos == 1 || $permisos == 4) 
 					{
 						$view_opciones_puntos_atencion->id = $_POST['id'];
 
