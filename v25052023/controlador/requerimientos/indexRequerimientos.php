@@ -4,6 +4,7 @@
 	session_start();
 
 	include_once '../../modelo/usuario.php';
+	include_once '../../modelo/articulos.php';
 	include_once '../../modelo/requerimientos.php';
 	include_once '../../modelo/opciones_sistemas.php';
 	include_once '../../modelo/opciones_campo.php';
@@ -15,6 +16,7 @@
 		{
 			$action = trim($_POST['action']);
 			$usuario = new Usuario();
+			$articulos = new Articulos();
 			$requerimientos = new Requerimientos();
 			$opciones_sistemas = new OpcionesSistemas();
 			$opciones_campo = new OpcionesCampo();
@@ -83,6 +85,9 @@
 
 							case 'almacen':
 							{
+								$view_requerimientos->almacen = $requerimientos->getDataAlmacen($view_requerimientos->id);
+								$view_requerimientos->articulos = $articulos->getDataToArray();
+
 								$template = '../../vista/templates/requerimientos/almacen/ver.php';
 
 								break;
@@ -167,7 +172,7 @@
 					$view_requerimientos->list_opciones = [];
 					$view_requerimientos->modo = $_POST['modo'];
 
-					if($permisos == 1)
+					if($permisos == 1 || $permisos == 2 || $permisos == 3 || $permisos == 4 || $permisos == 5)
 					{
 						switch($_POST['modo'])
 						{
@@ -197,7 +202,7 @@
 
 							case 'almacen':
 							{
-								$view_requerimientos->list_opciones = $opciones_sistemas->getData();
+								$view_requerimientos->list_opciones = $articulos->getData();
 								$template = '../../vista/templates/requerimientos/almacen/crear.php';
 
 								break;

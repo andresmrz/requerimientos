@@ -28,16 +28,52 @@
 </div>
 
 <div class="row">
-	<div class="form-group col-sm-6">
+	<div class="form-group col-sm-<?php echo ($view_requerimientos->modo == 'almacen')?12:6; ?>">
 		<label><b>Destinatario</b></label>
 		<input id="requerimientos-ver-destinatario" type="text" value="<?php echo $view_requerimientos->modo; ?>" class="form-control" readonly>
 	</div>
-
+<?php
+	if($view_requerimientos->modo != 'almacen')
+	{
+?>
 	<div class="form-group col-sm-6">
 		<label><b>Opción </b></label>
 		<input id="requerimientos-ver-opcion" type="text" value="<?php echo $view_requerimientos->opcion; ?>" class="form-control" readonly>
 	</div>
+<?php
+	}
+?>
 </div>
+
+<?php
+	if($view_requerimientos->modo == 'almacen')
+	{
+?>
+<hr>
+<div class="row">
+	<div class="col-sm-12"><b>Lista de Articulos</b></div>
+</div><br>
+<?php
+		foreach($view_requerimientos->almacen as $lista)
+		{
+?>
+<div class="row">
+	<div class="form-group col-sm-6">
+		<label><b>Articulo </b></label>
+		<input type="text" value="<?php echo $view_requerimientos->articulos['id_'.$lista['articulo']]['nombre']; ?>" class="form-control" readonly>
+	</div>
+
+	<div class="form-group col-sm-6">
+		<label><b>Cantidad </b></label>
+		<input type="text" value="<?php echo $lista['cantidad']; ?>" class="form-control text-center" readonly>
+	</div>
+</div>
+<?php
+		}
+	}
+?>
+
+<hr>
 
 <div class="row">
 	<div class="col-sm-12">

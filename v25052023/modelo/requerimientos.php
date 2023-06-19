@@ -42,12 +42,36 @@ class Requerimientos
     function insert($asunto, $destinatario, $opcion, $descripcion) // guarda en la bd un nuevo dato
     {
         $this->conexion->conectar();
-        $this->conexion->ejecutar("INSERT INTO datos(asunto, destinatario, opcion, descripcion, user_create, date_create, date_update) 
+
+        if(trim($destinatario == 'almacen'))
+        {
+            $this->conexion->ejecutar("INSERT INTO datos(asunto, destinatario, descripcion, user_create, date_create, date_update) 
+                                    VALUES('$asunto', '$destinatario', '$descripcion', $this->id_usuario, '$this->fecha_actual', '$this->fecha_actual')");
+            
+            $datos = explode('**', $opcion);
+            $id = $this->conexion->obtenerInsertId();
+
+            for($i = 0;$i < sizeof($datos); $i++)
+            {
+                $valor = explode('++', $datos[$i]);
+                $articulo = $valor[0];
+                $cantidad = $valor[1];
+
+                $this->conexion->ejecutar("INSERT INTO datos_almacen(datos, articulo, cantidad) VALUES($id, $articulo, $cantidad)");
+            }
+
+            $this->conexion->ejecutar("INSERT INTO historial_bd(usuario, detalle, fecha) VALUES($this->id_usuario,'genero el requerimiento $id','$this->fecha_actual')");
+        }
+        else
+        {
+            $this->conexion->ejecutar("INSERT INTO datos(asunto, destinatario, opcion, descripcion, user_create, date_create, date_update) 
                                     VALUES('$asunto', '$destinatario', '$opcion', '$descripcion', $this->id_usuario, '$this->fecha_actual', '$this->fecha_actual')");
+            
+            $id = $this->conexion->obtenerInsertId();
 
-        $id = $this->conexion->obtenerInsertId();
+            $this->conexion->ejecutar("INSERT INTO historial_bd(usuario, detalle, fecha) VALUES($this->id_usuario,'genero el requerimiento $id','$this->fecha_actual')");
+        }
 
-        $this->conexion->ejecutar("INSERT INTO historial_bd(usuario, detalle, fecha) VALUES($this->id_usuario,'genero el requerimiento $id','$this->fecha_actual')");
         $this->conexion->desconectar();
 
         return '0';
@@ -118,6 +142,17 @@ class Requerimientos
     function getData() // retorna todos los datos de la bd
     {
         $sql = "SELECT * FROM datos ORDER BY date_create ASC";
+
+        $this->conexion->conectar();
+        $result = $this->conexion->consultar($sql);
+        $this->conexion->desconectar();
+
+        return $result;
+    }
+
+    function getDataAlmacen($requerimiento) // retorna todos los datos de la bd
+    {
+        $sql = "SELECT * FROM datos_almacen WHERE datos = $requerimiento";
 
         $this->conexion->conectar();
         $result = $this->conexion->consultar($sql);
