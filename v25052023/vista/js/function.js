@@ -159,7 +159,7 @@ function requerimientos_cargarIndex(cargar)
             if(datosTabla.length == 0)
             {
                 var datosTabla = document.querySelectorAll('#requerimientos-tabla thead');
-                datosTabla[0].innerHTML += '<th class="text-center" colspan="8">Sin resultados</th>';
+                datosTabla[0].innerHTML += '<th class="text-center" colspan="7">Sin resultados</th>';
             }
 
             mostrar('contenedor-ventanas');

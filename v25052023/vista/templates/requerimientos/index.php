@@ -74,7 +74,7 @@
 		<table class="table table-bordered tablas" id="requerimientos-tabla">
 			<thead>
 				<tr>
-					<th class="text-center" colspan="8">
+					<th class="text-center" colspan="7">
 						<b>LISTADO DE REQUERIMIENTOS</b>
 						<?php if($permisos == 1){ ?>
 						<button title="Descargar Excel" class="generar-excel-boton-descargar" onclick="tablaToExcel('requerimientos-tabla-descarga','Lista de requerimientos','ListaRequerimientos','','ListaRequerimientos','calivirtual.net/requerimientos','../lb/generarExcel/php/generarExcel.php');"><img src="../img/excel.png"></button>
@@ -84,7 +84,6 @@
 				<tr>
 					<th class="text-center"><b>FECHA</b></th>
 					<th class="text-center"><b>ASUNTO</b></th>
-					<th class="text-center"><b>OPCIÓN</b></th>
 					<th class="text-center"><b>DESCRIPCIÓN</b></th>
 					<th class="text-center"><b>SOLICITANTE</b></th>
 					<th class="text-center"><b>DESTINATARIO</b></th>
@@ -149,13 +148,20 @@
 								}
 							}
 
+							if($permisos == 5)
+							{
+								if($lista['destinatario'] == 'almacen' || $lista['user_create'] == $_SESSION['requerimientos_usuario'])
+								{
+									$mostrar = true;
+								}
+							}
+
 							if($mostrar)
 							{	
 				?>
 
 				<tr>
 					<td><?php echo $fecha->soloFecha($lista['date_create']); ?></td>
-					<td><?php echo $lista['asunto']; ?></td>
 					<td><?php echo $lista['opcion']; ?></td>
 					<td><?php echo $lista['descripcion']; ?></td>
 					<td><?php echo $view_requerimientos->usuarios['id_'.$lista['user_create']]['nombre']; ?></td>
@@ -205,7 +211,6 @@
 				<tr>
 					<th><b>FECHA</b></th>
 					<th><b>ASUNTO</b></th>
-					<th><b>OPCIÓN</b></th>
 					<th><b>DESCRIPCIÓN</b></th>
 					<th><b>SOLICITANTE</b></th>
 					<th><b>DESTINATARIO</b></th>
@@ -245,13 +250,44 @@
 								$mostrar = true;
 							}
 
+							if($permisos == 2)
+							{
+								if($lista['destinatario'] == 'sistemas' || $lista['user_create'] == $_SESSION['requerimientos_usuario'])
+								{
+									$mostrar = true;
+								}
+							}
+
+							if($permisos == 3)
+							{
+								if($lista['destinatario'] == 'campo' || $lista['user_create'] == $_SESSION['requerimientos_usuario'])
+								{
+									$mostrar = true;
+								}
+							}
+
+							if($permisos == 4)
+							{
+								if($lista['destinatario'] == 'puntos_atencion' || $lista['user_create'] == $_SESSION['requerimientos_usuario'])
+								{
+									$mostrar = true;
+								}
+							}
+
+							if($permisos == 5)
+							{
+								if($lista['destinatario'] == 'almacen' || $lista['user_create'] == $_SESSION['requerimientos_usuario'])
+								{
+									$mostrar = true;
+								}
+							}
+
 							if($mostrar)
 							{	
 				?>
 
 				<tr>
 					<td><?php echo $fecha->soloFecha($lista['date_create']); ?></td>
-					<td><?php echo $lista['asunto']; ?></td>
 					<td><?php echo $lista['opcion']; ?></td>
 					<td><?php echo $lista['descripcion']; ?></td>
 					<td><?php echo $view_requerimientos->usuarios['id_'.$lista['user_create']]['nombre']; ?></td>

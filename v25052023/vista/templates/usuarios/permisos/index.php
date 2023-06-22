@@ -97,7 +97,9 @@
 								"3" => 'Supervisor Campo',
                                 "31" => 'Auxiliar Campo',
                                 "4" => 'Supervisor Puntos de Atención',
-                                "41" => 'Auxiliar Puntos de Atención'								
+                                "41" => 'Auxiliar Puntos de Atención',
+								"5" => 'Supervisor Almacen',
+                                "51" => 'Auxiliar Almacen'								
 							);
 
 							$contador = 0;

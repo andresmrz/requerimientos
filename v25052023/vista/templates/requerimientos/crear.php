@@ -24,18 +24,13 @@
 	<br>
 
 	<div class="row">
-		<div class="form-group col-sm-6">
-			<label><b>Asunto </b><span class="text-danger hint--top hint--primary" data-hint="Campo obligatotio" style="cursor: pointer;">(*)</span></label>
-			<input id="requerimientos-crear-asunto" type="text" value="" class="form-control" placeholder="Digite el asunto" minlength="1" maxlength="49" required>
-		</div>
-
-		<div class="form-group col-sm-6">
+		<div class="form-group col-sm-12">
 			<label><b>Destinatario </b><span class="text-danger hint--top hint--primary" data-hint="Campo obligatotio" style="cursor: pointer;">(*)</span></label>
 			<select id="requerimientos-crear-destinatario" class="form-control" style="height: 46.5px" onchange="requerimientos_destinatario(this.value)" required>
 				<option value="" selected disabled>Seleccione el destinatario</option>
 				<option <?php echo ($permisos == 2)?'style="display: none"':''; ?> value="sistemas">Sistemas</option>
-				<option <?php echo ($permisos == 3)?'style="display: none"':''; ?> value="campo">Campo</option>
-				<option <?php echo ($permisos == 4)?'style="display: none"':''; ?> value="puntos_atencion">Puntos de atención</option>
+				<!--<option <?php echo ($permisos == 3)?'style="display: none"':''; ?> value="campo">Campo</option>
+				<option <?php echo ($permisos == 4)?'style="display: none"':''; ?> value="puntos_atencion">Puntos de atención</option>-->
 				<option <?php echo ($permisos == 5)?'style="display: none"':''; ?> value="almacen">Almacen</option>
 			</select>
 		</div>

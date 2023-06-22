@@ -39,23 +39,29 @@ class Requerimientos
         }
     }
     
-    function insert($asunto, $destinatario, $opcion, $descripcion) // guarda en la bd un nuevo dato
+    function insert($destinatario, $opcion, $cantidad, $punto, $descripcion, $correo) // guarda en la bd un nuevo dato
     {
         $this->conexion->conectar();
+        $correo_asunto = '';
 
         if(trim($destinatario == 'almacen'))
         {
-            $this->conexion->ejecutar("INSERT INTO datos(asunto, destinatario, descripcion, user_create, date_create, date_update) 
-                                    VALUES('$asunto', '$destinatario', '$descripcion', $this->id_usuario, '$this->fecha_actual', '$this->fecha_actual')");
+            $this->conexion->ejecutar("INSERT INTO datos(destinatario, descripcion, user_create, date_create, date_update) 
+                                    VALUES('$destinatario', '$descripcion', $this->id_usuario, '$this->fecha_actual', '$this->fecha_actual')");
             
             $datos = explode('**', $opcion);
             $id = $this->conexion->obtenerInsertId();
+
+            $correo_asunto .= '<b>Lista de Articulos: </b><br><br>';
 
             for($i = 0;$i < sizeof($datos); $i++)
             {
                 $valor = explode('++', $datos[$i]);
                 $articulo = $valor[0];
                 $cantidad = $valor[1];
+                $articuloNombre = $valor[2];
+
+                $correo_asunto .= '<b>'.$articuloNombre.': </b>'.$cantidad.'<br>';
 
                 $this->conexion->ejecutar("INSERT INTO datos_almacen(datos, articulo, cantidad) VALUES($id, $articulo, $cantidad)");
             }
@@ -64,12 +70,122 @@ class Requerimientos
         }
         else
         {
-            $this->conexion->ejecutar("INSERT INTO datos(asunto, destinatario, opcion, descripcion, user_create, date_create, date_update) 
-                                    VALUES('$asunto', '$destinatario', '$opcion', '$descripcion', $this->id_usuario, '$this->fecha_actual', '$this->fecha_actual')");
+            $correo_asunto .= '<b>Asunto: </b>'.$opcion.'<br>';
+
+            if($opcion == 'COMPUTADOR' || $opcion == 'IMPRESORA')
+            {
+                $correo_asunto .= '<b>Cantidad: </b>'.$cantidad.'<br>';
+            }
+
+            $correo_asunto .= '<b>Punto: </b>'.$punto.'<br>';
+
+            $cantidad = ((trim($cantidad) == '')?'null':"$cantidad");
+
+            $this->conexion->ejecutar("INSERT INTO datos(destinatario, opcion, cantidad, punto, descripcion, user_create, date_create, date_update) 
+                                    VALUES('$destinatario', '$opcion', $cantidad, '$punto', '$descripcion', $this->id_usuario, '$this->fecha_actual', '$this->fecha_actual')");
             
             $id = $this->conexion->obtenerInsertId();
 
             $this->conexion->ejecutar("INSERT INTO historial_bd(usuario, detalle, fecha) VALUES($this->id_usuario,'genero el requerimiento $id','$this->fecha_actual')");
+        }
+
+        if($correo != '')
+        {
+            $to = $correo;
+
+            $subject = "Creacion de Requerimiento";
+            $headers = "From: procesos@calivirtual.net\r\nMIME-Version: 1.0" . "\r\n";
+            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+            
+            $message = '<html lang="es" id="html">
+            <head>
+                <title>Sisben Requerimientos</title>
+            
+                <meta charset="utf-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, user-scalable=1.0, initial-scale=1.0, maximum-scale=3.0, minimum-scale=1.0">
+                <meta name="description" content="">
+            
+                <style>
+                    .contenedor
+                    {
+                        padding: 100px 0;
+                        background-color: #f1f1f1;
+                        font-family: -webkit-pictograph;
+                    }
+            
+                    .logo
+                    {
+                        margin-top: 50px;
+                    }
+            
+                    .logo img
+                    {
+                        position: relative;
+                        width: 340px;
+                    }
+            
+                    .titulo
+                    {
+                        position: relative;
+                        margin: 70px 0 50px 0;
+                        text-align: center;
+                        font-size: 40px;
+                    }
+            
+                    .mensaje
+                    {
+                        position: relative;
+                        width: 500px;
+                        background: white;
+                        padding: 60px;
+                        font-size: 20px;
+                        margin-top: 50px;
+                    }
+            
+                    .mensaje a
+                    {
+                        text-decoration: none;
+                        color: #246bed;
+                    }
+                </style>
+            
+            </head>
+            <body>
+                <div class="contenedor">
+                    <div class="contenedor-principal">
+                        <div class="logo">
+                            <center>
+                                <img src="https://calivirtual.net/images/favicon_v2.jpg" alt="">
+                            </center>
+                        </div>
+            
+                        <div class="titulo">
+                            Notificación de creación de un requerimiento
+                        </div>
+            
+                        <center>
+                            <div class="mensaje">
+                                Hola,
+                                <br><br>
+                                Ha se registro en el portal <a href="https://calivirtual.net/requerimientos" target="_blank">requerimientos</a> la creación de un requerimiento.
+                                <br><br>
+                                '.$correo_asunto.'
+                                <b>Descripción: </b> '.$descripcion.'<br>           
+                            </div>
+                        </center>
+                    </div>
+                </div>
+            </body>';
+            
+            if(mail($to, $subject, $message, $headers))
+            {
+                echo '';
+            }
+            else
+            {
+                echo '';
+            }
         }
 
         $this->conexion->desconectar();
@@ -77,10 +193,12 @@ class Requerimientos
         return '0';
     }
 
-    function update($id, $asunto, $opcion, $descripcion) // actualiza los valores del dato en la bd
-    {                
+    function update($id, $opcion, $cantidad, $punto, $descripcion) // actualiza los valores del dato en la bd
+    {
+        $cantidad = ((trim($cantidad) == '')?'null':"$cantidad");
+
         $this->conexion->conectar();
-        $this->conexion->ejecutar("UPDATE datos SET asunto = '$asunto', opcion = '$opcion', descripcion = '$descripcion', date_update = '$this->fecha_actual' WHERE id = $id limit 1");
+        $this->conexion->ejecutar("UPDATE datos SET opcion = '$opcion', cantidad = $cantidad, punto = '$punto', descripcion = '$descripcion', date_update = '$this->fecha_actual' WHERE id = $id limit 1");
 
         $this->conexion->ejecutar("INSERT INTO historial_bd(usuario,detalle,fecha) VALUES($this->id_usuario,'actualizo el requerimiento $id','$this->fecha_actual')");
 

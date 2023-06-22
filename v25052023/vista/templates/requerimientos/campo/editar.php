@@ -14,13 +14,8 @@
 	<br>
 
 	<div class="row">
-		<div class="form-group col-sm-6">
+		<div class="form-group col-sm-12">
 			<label><b>Asunto </b><span class="text-danger hint--top hint--primary" data-hint="Campo obligatotio" style="cursor: pointer;">(*)</span></label>
-			<input id="requerimientos-editar-asunto" type="text" value="<?php echo $view_requerimientos->asunto; ?>" class="form-control" placeholder="Digite el asunto" minlength="1" maxlength="49" required>
-		</div>
-
-		<div class="form-group col-sm-6">
-			<label><b>Opción </b><span class="text-danger hint--top hint--primary" data-hint="Campo obligatotio" style="cursor: pointer;">(*)</span></label>
 			<select id="requerimientos-editar-opcion" class="form-control js-example-basic-single" style="height: 46.5px" required>
 				<option value="" selected disabled>Seleccione la opción</option>
 				<?php 

@@ -16,6 +16,8 @@
 			$requerimientos = new Requerimientos();
 			$fecha = new Fecha();
 
+			$permisos = intval($usuario->getPermisos($_SESSION['requerimientos_usuario']));
+
 			$view_requerimientos = new stdClass();
 
 			switch($action)
@@ -41,10 +43,39 @@
 
 				case 'crear':
 				{
+					$id_permiso = 0;
+
+					if($permisos == 1)
+					{
+						$id_permiso = 1;
+					}
+
+					if($permisos == 2 || $permisos == 21)
+					{
+						$id_permiso = 2;
+					}
+
+					if($permisos == 3 || $permisos == 31)
+					{
+						$id_permiso = 3;
+					}
+
+					if($permisos == 4 || $permisos == 41)
+					{
+						$id_permiso = 4;
+					}
+
+					if($permisos == 5 || $permisos == 51)
+					{
+						$id_permiso = 5;
+					}
+
+					$correo = trim($usuario->getCorreo($id_permiso));
+
 					$salida['modo'] = 0;
 					$mensaje = '';
 
-					$result = $requerimientos->insert(strtoupper($_POST['asunto']), $_POST['destinatario'], $_POST['opcion'], $_POST['descripcion']);
+					$result = $requerimientos->insert($_POST['destinatario'], $_POST['opcion'], $_POST['cantidad'], $_POST['punto'], $_POST['descripcion'], $correo);
 					$salida['mensaje'] = $mensaje;
 
 					if(trim($result) != '0')
@@ -60,7 +91,7 @@
 
 				case 'editar':
 				{
-					echo $requerimientos->update($_POST['id'], $_POST['asunto'], $_POST['opcion'], $_POST['descripcion']);
+					echo $requerimientos->update($_POST['id'], $_POST['opcion'], $_POST['cantidad'], $_POST['punto'], $_POST['descripcion']);
 					
 					break;
 				}

@@ -11,19 +11,14 @@
 </div>
 
 <div class="row">
-	<div class="form-group col-sm-4">
+	<div class="form-group col-sm-6">
 		<label><b>Fecha de creación </b></label>
 		<input id="requerimientos-ver-fecha" type="text" value="<?php echo $fecha->fechaAndHora($view_requerimientos->fecha); ?>" class="form-control" readonly>
 	</div>
 
-	<div class="form-group col-sm-4">
+	<div class="form-group col-sm-6">
 		<label><b>Usuario que creo el requerimiento </b></label>
 		<input id="requerimientos-ver-user-create" type="text" value="<?php echo $view_requerimientos->usuarios['id_'.$view_requerimientos->user_create]['nombre']; ?>" class="form-control" readonly>
-	</div>
-
-	<div class="form-group col-sm-4">
-		<label><b>Asunto </b></label>
-		<input id="requerimientos-ver-asunto" type="text" value="<?php echo $view_requerimientos->asunto; ?>" class="form-control" readonly>
 	</div>
 </div>
 
@@ -34,10 +29,29 @@
 	</div>
 
 	<div class="form-group col-sm-6">
-		<label><b>Opción </b></label>
+		<label><b>Asunto </b></label>
 		<input id="requerimientos-ver-opcion" type="text" value="<?php echo $view_requerimientos->opcion; ?>" class="form-control" readonly>
 	</div>
 </div>
+
+<?php
+	if($view_requerimientos->opcion == 'COMPUTADOR' || $view_requerimientos->opcion == 'IMPRESORA')
+	{
+?>
+<div class="row">
+	<div class="form-group col-sm-6">
+		<label><b>Cantidad</b></label>
+		<input id="requerimientos-ver-cantidad" type="text" value="<?php echo $view_requerimientos->cantidad; ?>" class="form-control" readonly>
+	</div>
+
+	<div class="form-group col-sm-6">
+		<label><b>Punto </b></label>
+		<input id="requerimientos-ver-punto" type="text" value="<?php echo $view_requerimientos->punto; ?>" class="form-control" readonly>
+	</div>
+</div>
+<?php
+	}
+?>
 
 <div class="row">
 	<div class="col-sm-12">

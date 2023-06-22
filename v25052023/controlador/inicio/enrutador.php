@@ -84,7 +84,25 @@
             echo '<script language="javascript">window.location="../../vista/templates/auxiliar_puntos_atencion"</script>';
 
             break;
-        }                
+        } 
+        
+        case 5:
+        {
+            $_SESSION['requerimientos_admin'] = '../';
+            
+            echo '<script language="javascript">window.location="../../vista/templates/supervisor_almacen"</script>';
+
+            break;
+        }
+
+        case 51:
+        {
+            $_SESSION['requerimientos_admin'] = '../';
+            
+            echo '<script language="javascript">window.location="../../vista/templates/auxiliar_almacen"</script>';
+
+            break;
+        } 
 
     	default:
     	{

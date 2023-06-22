@@ -74,9 +74,10 @@ function requerimientos_crear_confirmar()
 
 function requerimientos_crear()
 {
-    var asunto = $('#requerimientos-crear-asunto').val();
     var destinatario = $('#requerimientos-crear-destinatario').val();
     var opcion = '';
+    var cantidad = $('#requerimientos-crear-cantidad').val();
+    var punto = $('#requerimientos-crear-punto').val();
     var descripcion = $('#requerimientos-crear-descripcion').val();
 
     if(destinatario == 'almacen')
@@ -91,9 +92,10 @@ function requerimientos_crear()
     var parametros = 
     {
         action: 'crear',
-        asunto: asunto,
         destinatario: destinatario,
         opcion: opcion,
+        cantidad: cantidad,
+        punto: punto,
         descripcion: descripcion
     };
 
@@ -143,6 +145,7 @@ function requerimientos_cargar_editar(id)
     {
         $('#requerimientos-contenedor-2').load('../../controlador/requerimientos/indexRequerimientos.php',{action:'editar', id:id},function()
         {
+            requerimientos_cambiar_opcion('editar', $('#requerimientos-editar-opcion').val());
             cambiarSubcontenedor('requerimientos-contenedor', 2);
             verMenu();
 
@@ -170,39 +173,80 @@ function requerimientos_editar_confirmar(id)
 
 function requerimientos_editar(id)
 {
-    var asunto = $('#requerimientos-editar-asunto').val();
-    var opcion = $('#requerimientos-editar-opcion').val();
-    var descripcion = $('#requerimientos-editar-descripcion').val();
+    var modo = $('#requerimientos-editar-modo').val();
 
-    var parametros = 
+    if(modo == 'almacen')
     {
-        action: 'editar',
-        id: id,
-        asunto: asunto,
-        opcion: opcion,
-        descripcion: descripcion
-    };
+        var opcion = $('#requerimientos-editar-opcion').val();
+        var descripcion = $('#requerimientos-editar-descripcion').val();
 
-    $.ajax(
-    {
-        type: 'POST',
-        url: '../../controlador/requerimientos/controllerRequerimientos.php',
-        data: parametros,
-        success: function(respuesta)
+        var parametros = 
         {
-            if(respuesta.trim() == '0')
-            {
-                mostrarAlerta('MENSAJE DE CONFIRMACIÓN','Requerimiento actualizado correctamente.', 1);
+            action: 'editar',
+            id: id,
+            opcion: opcion,
+            descripcion: descripcion
+        };
 
-                requerimientos_cargarIndex(false);
-            }
-            else
+        $.ajax(
+        {
+            type: 'POST',
+            url: '../../controlador/requerimientos/controllerRequerimientos.php',
+            data: parametros,
+            success: function(respuesta)
             {
-                console.log(respuesta.trim());
-                alert(respuesta.trim());
+                if(respuesta.trim() == '0')
+                {
+                    mostrarAlerta('MENSAJE DE CONFIRMACIÓN','Requerimiento actualizado correctamente.', 1);
+
+                    requerimientos_cargarIndex(false);
+                }
+                else
+                {
+                    console.log(respuesta.trim());
+                    alert(respuesta.trim());
+                }
             }
-        }
-    });
+        });
+    }
+    else
+    {
+        var opcion = $('#requerimientos-editar-opcion').val();
+        var cantidad = $('#requerimientos-editar-cantidad').val();
+        var punto = $('#requerimientos-editar-punto').val();
+        var descripcion = $('#requerimientos-editar-descripcion').val();
+
+        var parametros = 
+        {
+            action: 'editar',
+            id: id,
+            opcion: opcion,
+            cantidad: cantidad,
+            punto: punto,
+            descripcion: descripcion
+        };
+
+        $.ajax(
+        {
+            type: 'POST',
+            url: '../../controlador/requerimientos/controllerRequerimientos.php',
+            data: parametros,
+            success: function(respuesta)
+            {
+                if(respuesta.trim() == '0')
+                {
+                    mostrarAlerta('MENSAJE DE CONFIRMACIÓN','Requerimiento actualizado correctamente.', 1);
+
+                    requerimientos_cargarIndex(false);
+                }
+                else
+                {
+                    console.log(respuesta.trim());
+                    alert(respuesta.trim());
+                }
+            }
+        });
+    }
 }
 
 function requerimientos_eliminar_confirmar(id)
@@ -492,7 +536,7 @@ function requerimientos_agregar_articulo()
                 contenido_articulos += '**';
             }
 
-            contenido_articulos += articulo + '++' + cantidad;
+            contenido_articulos += articulo + '++' + cantidad + '++' + articuloNombre;
 
             articulos.value = contenido_articulos;
 
@@ -597,6 +641,34 @@ function requerimientos_verificar_duplicado(valor)
     }
 
     return salida;
+}
+
+function requerimientos_cambiar_opcion(modo, valor)
+{
+    if(valor == 'COMPUTADOR' || valor == 'IMPRESORA')
+    {
+        $('#requerimientos-contenedor-' + modo + '-opcion').removeClass('col-sm-6');
+        $('#requerimientos-contenedor-' + modo + '-punto').removeClass('col-sm-6');
+        $('#requerimientos-contenedor-' + modo + '-opcion').addClass('col-sm-4');
+        $('#requerimientos-contenedor-' + modo + '-punto').addClass('col-sm-4');
+        mostrar('requerimientos-contenedor-' + modo + '-cantidad');
+        document.getElementById('requerimientos-' + modo + '-cantidad').required = true;
+
+        if(document.getElementById('requerimientos-' + modo + '-cantidad').value == '')
+        {
+            document.getElementById('requerimientos-' + modo + '-cantidad').value = 1;
+        }
+    }
+    else
+    {
+        $('#requerimientos-contenedor-' + modo + '-opcion').removeClass('col-sm-4');
+        $('#requerimientos-contenedor-' + modo + '-punto').removeClass('col-sm-4');
+        $('#requerimientos-contenedor-' + modo + '-opcion').addClass('col-sm-6');
+        $('#requerimientos-contenedor-' + modo + '-punto').addClass('col-sm-6');
+        ocultar('requerimientos-contenedor-' + modo + '-cantidad');
+        document.getElementById('requerimientos-' + modo + '-cantidad').required = false;
+        document.getElementById('requerimientos-' + modo + '-cantidad').value = '';
+    }
 }
 
 ////////////////////// extras ///////////////////////////////////

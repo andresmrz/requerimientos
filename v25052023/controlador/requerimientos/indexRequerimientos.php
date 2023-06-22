@@ -32,7 +32,7 @@
 			{
 				case 'index':
 				{
-					if($permisos == 1 || $permisos == 2 || $permisos == 3 || $permisos == 4)
+					if($permisos == 1 || $permisos == 2 || $permisos == 3 || $permisos == 4 || $permisos == 5)
 					{
 						$view_requerimientos->lista = $requerimientos->getData();
 						$view_requerimientos->usuarios = $usuario->getAuxiliaresToArray();
@@ -50,7 +50,8 @@
 					$view_requerimientos->id = $_POST['id'];
 					$view_requerimientos->modo = $requerimientos->getValorId($_POST['id'], 'destinatario');
 					$view_requerimientos->opcion = $requerimientos->getValorId($_POST['id'], 'opcion');
-					$view_requerimientos->asunto = $requerimientos->getValorId($_POST['id'], 'asunto');
+					$view_requerimientos->cantidad = $requerimientos->getValorId($_POST['id'], 'cantidad');
+					$view_requerimientos->punto = $requerimientos->getValorId($_POST['id'], 'punto');
 					$view_requerimientos->descripcion = $requerimientos->getValorId($_POST['id'], 'descripcion');
 					$view_requerimientos->estado = intval($requerimientos->getValorId($_POST['id'], 'estado'));
 					$view_requerimientos->observaciones_solucion = $requerimientos->getValorId($_POST['id'], 'observaciones_solucion');
@@ -105,7 +106,7 @@
 
 				case 'crear':
 				{
-					if($permisos == 1 || $permisos == 2 || $permisos == 3 || $permisos == 4)
+					if($permisos == 1 || $permisos == 2 || $permisos == 3 || $permisos == 4 || $permisos == 5)
 					{
 						$template = '../../vista/templates/requerimientos/crear.php';
 					}
@@ -118,16 +119,21 @@
 					$view_requerimientos->id = $_POST['id'];
 					$view_requerimientos->modo = $requerimientos->getValorId($_POST['id'], 'destinatario');
 					$view_requerimientos->opcion = $requerimientos->getValorId($_POST['id'], 'opcion');
-					$view_requerimientos->asunto = $requerimientos->getValorId($_POST['id'], 'asunto');
+					$view_requerimientos->cantidad = $requerimientos->getValorId($_POST['id'], 'cantidad');
+					$view_requerimientos->punto = $requerimientos->getValorId($_POST['id'], 'punto');
 					$view_requerimientos->descripcion = $requerimientos->getValorId($_POST['id'], 'descripcion');
 
-					if($permisos == 1)
+					$view_requerimientos->list_opciones = [];
+					$view_requerimientos->list_puntos = [];
+
+					if($permisos == 1 || $permisos == 2 || $permisos == 3 || $permisos == 4 || $permisos == 5)
 					{
 						switch($view_requerimientos->modo)
 						{
 							case 'sistemas':
 							{
 								$view_requerimientos->list_opciones = $opciones_sistemas->getData();
+								$view_requerimientos->list_puntos = $usuario->getPuntosCali();
 								$template = '../../vista/templates/requerimientos/sistemas/editar.php';
 
 								break;
@@ -136,6 +142,7 @@
 							case 'campo':
 							{
 								$view_requerimientos->list_opciones = $opciones_campo->getData();
+								$view_requerimientos->list_puntos = $usuario->getPuntosCali();
 								$template = '../../vista/templates/requerimientos/campo/editar.php';
 
 								break;
@@ -144,6 +151,7 @@
 							case 'puntos_atencion':
 							{
 								$view_requerimientos->list_opciones = $opciones_puntos_atencion->getData();
+								$view_requerimientos->list_puntos = $usuario->getPuntosCali();
 								$template = '../../vista/templates/requerimientos/puntos_atencion/editar.php';
 
 								break;
@@ -152,6 +160,7 @@
 							case 'almacen':
 							{
 								$view_requerimientos->list_opciones = $opciones_sistemas->getData();
+								$view_requerimientos->list_puntos = $usuario->getPuntosCali();
 								$template = '../../vista/templates/requerimientos/almacen/editar.php';
 
 								break;
@@ -170,6 +179,7 @@
 				case 'datos':
 				{
 					$view_requerimientos->list_opciones = [];
+					$view_requerimientos->list_puntos = [];
 					$view_requerimientos->modo = $_POST['modo'];
 
 					if($permisos == 1 || $permisos == 2 || $permisos == 3 || $permisos == 4 || $permisos == 5)
@@ -179,6 +189,7 @@
 							case 'sistemas':
 							{
 								$view_requerimientos->list_opciones = $opciones_sistemas->getData();
+								$view_requerimientos->list_puntos = $usuario->getPuntosCali();
 								$template = '../../vista/templates/requerimientos/sistemas/crear.php';
 
 								break;
@@ -187,6 +198,7 @@
 							case 'campo':
 							{
 								$view_requerimientos->list_opciones = $opciones_campo->getData();
+								$view_requerimientos->list_puntos = $usuario->getPuntosCali();
 								$template = '../../vista/templates/requerimientos/campo/crear.php';
 
 								break;
@@ -195,6 +207,7 @@
 							case 'puntos_atencion':
 							{
 								$view_requerimientos->list_opciones = $opciones_puntos_atencion->getData();
+								$view_requerimientos->list_puntos = $usuario->getPuntosCali();
 								$template = '../../vista/templates/requerimientos/puntos_atencion/crear.php';
 
 								break;
@@ -203,6 +216,7 @@
 							case 'almacen':
 							{
 								$view_requerimientos->list_opciones = $articulos->getData();
+								$view_requerimientos->list_puntos = $usuario->getPuntosCali();
 								$template = '../../vista/templates/requerimientos/almacen/crear.php';
 
 								break;
@@ -220,7 +234,7 @@
 
 				case 'procesar':
 				{
-					if($permisos == 1 || $permisos == 2 || $permisos == 3 || $permisos == 4)
+					if($permisos == 1 || $permisos == 2 || $permisos == 3 || $permisos == 4 || $permisos == 5)
 					{
 						$view_requerimientos->id = $_POST['id'];
 						$view_requerimientos->opcion = $requerimientos->getValorId($_POST['id'], 'opcion');
@@ -235,7 +249,7 @@
 
 				case 'rechazar':
 				{
-					if($permisos == 1 || $permisos == 2 || $permisos == 3 || $permisos == 4)
+					if($permisos == 1 || $permisos == 2 || $permisos == 3 || $permisos == 4 || $permisos == 5)
 					{
 						$view_requerimientos->id = $_POST['id'];
 						$view_requerimientos->opcion = $requerimientos->getValorId($_POST['id'], 'opcion');

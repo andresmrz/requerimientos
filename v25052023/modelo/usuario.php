@@ -323,6 +323,43 @@
 			return $data_usuarios;
 		}
 
+		function getPuntosCali()
+		{
+			$this->conexion_p2->conectar();
+			$result = $this->conexion_p2->consultar("SELECT * from puntos_cali ORDER BY nombre ASC");
+			$this->conexion_p2->desconectar();
+
+			return $result;
+		}
+
+		function getCorreo($permiso)
+		{
+			$salida = '';
+
+			$this->conexion->conectar();
+			$this->conexion_p2->conectar();
+
+			$result = $this->conexion->consultar("SELECT count(id) as cantidad FROM permisos WHERE valor = $permiso");
+			$row = mysqli_fetch_assoc($result);
+
+			if(intval($row['cantidad']) > 0)
+			{
+				$result = $this->conexion->consultar("SELECT usuario FROM permisos WHERE valor = $permiso limit 1");
+				$row = mysqli_fetch_assoc($result);
+				$id = $row['usuario'];
+
+				$result2 = $this->conexion_p2->consultar("SELECT correo FROM usuario WHERE id = $id limit 1");
+				$row2 = mysqli_fetch_assoc($result2);
+
+				$salida = $row2['correo'];
+			}
+
+			$this->conexion->desconectar();
+			$this->conexion_p2->desconectar();
+
+			return $salida;
+		}
+
 		///////////// permisos ///////////////////
 
 		function insert_permisos($usuario, $permisos)
