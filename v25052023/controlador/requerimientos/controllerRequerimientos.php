@@ -4,6 +4,7 @@
 	session_start();
 
 	include_once '../../modelo/usuario.php';
+	include_once '../../modelo/articulos.php';
 	include_once '../../modelo/requerimientos.php';
 	include_once '../../modelo/fecha.php';
 
@@ -13,6 +14,7 @@
 		{
 			$action = (isset($_POST['action']))?trim($_POST['action']):trim($_GET['autocomplete']);
 			$usuario = new Usuario();
+			$articulos = new Articulos();
 			$requerimientos = new Requerimientos();
 			$fecha = new Fecha();
 
@@ -22,16 +24,45 @@
 
 			switch($action)
 			{
-				case 'verificar_existe':
+				case 'verificar_existencias':
 				{
 					$salida['modo'] = 0;
 					$mensaje = '';
+					$cantidad = intval($_POST['cantidad']);
+					$existencias = intval($articulos->getValorId($_POST['articulo'], 'cantidad'));
 
-					if($requerimientos->existe($_POST['nombre']))
+					if($cantidad > $existencias)
 					{
 						$salida['modo'] = 1;
 
-						$mensaje = $_POST['nombre'].' ya existe.';
+						$mensaje = 'Existencias: '.$existencias.'.';
+					}
+
+					$salida['mensaje'] = $mensaje;
+
+					echo json_encode($salida);
+					
+					break;
+				}
+
+				case 'verificar_existencias_id':
+				{
+					$salida['modo'] = 0;
+					$mensaje = '';
+					$data_articulos = $requerimientos->getDataAlmacen($_POST['id']);
+
+					foreach($data_articulos as $lista)
+					{
+						$cantidad = intval($lista['cantidad']);
+						$existencias = intval($articulos->getValorId($lista['articulo'], 'cantidad'));
+						$nombre = $articulos->getValorId($lista['articulo'], 'nombre');
+
+						if($cantidad > $existencias)
+						{
+							$salida['modo'] = 1;
+
+							$mensaje .= $nombre.': '.$existencias.' existencias.<br>';
+						}
 					}
 
 					$salida['mensaje'] = $mensaje;
@@ -45,27 +76,27 @@
 				{
 					$id_permiso = 0;
 
-					if($permisos == 1)
+					if(trim($_POST['destinatario']) == 'admin')
 					{
 						$id_permiso = 1;
 					}
 
-					if($permisos == 2 || $permisos == 21)
+					if(trim($_POST['destinatario']) == 'sistemas')
 					{
 						$id_permiso = 2;
 					}
 
-					if($permisos == 3 || $permisos == 31)
+					if(trim($_POST['destinatario']) == 'campo')
 					{
 						$id_permiso = 3;
 					}
 
-					if($permisos == 4 || $permisos == 41)
+					if(trim($_POST['destinatario']) == 'puntos_atencion')
 					{
 						$id_permiso = 4;
 					}
 
-					if($permisos == 5 || $permisos == 51)
+					if(trim($_POST['destinatario']) == 'almacen')
 					{
 						$id_permiso = 5;
 					}
@@ -91,7 +122,9 @@
 
 				case 'editar':
 				{
-					echo $requerimientos->update($_POST['id'], $_POST['opcion'], $_POST['cantidad'], $_POST['punto'], $_POST['descripcion']);
+					$modo = $requerimientos->getValorId($_POST['id'], 'destinatario');
+
+					echo $requerimientos->update($_POST['id'], $_POST['opcion'], $_POST['cantidad'], $_POST['punto'], $_POST['descripcion'], $modo);
 					
 					break;
 				}
@@ -112,7 +145,9 @@
 
 				case 'procesar':
 				{
-					echo $requerimientos->procesar($_POST['id'], $_POST['observaciones']);
+					$data_articulos = $requerimientos->getDataAlmacen($_POST['id']);
+
+					echo $requerimientos->procesar($_POST['id'], $_POST['observaciones'], $data_articulos);
 					
 					break;
 				}

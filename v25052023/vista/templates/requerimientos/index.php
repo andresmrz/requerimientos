@@ -169,25 +169,58 @@
 					<td><?php echo $estado; ?></td>
 					<td class="text-center">
 						<?php 
-					  		if($permisos == 1)
-					  		{
+							$mostrarBotonVer = false;
+							$mostrarBotonEditar = false;
+							$mostrarBotonEliminar = false;
+							
+							if($permisos == 1 || ($permisos == 2 && $lista['destinatario'] == 'sistemas') || ($permisos == 3 && $lista['destinatario'] == 'campo') 
+								|| ($permisos == 4 && $lista['destinatario'] == 'puntos_atencion') || ($permisos == 5 && $lista['destinatario'] == 'almacen')
+								|| ($_SESSION['requerimientos_usuario'] == $lista['user_create']))
+							{
+								$mostrarBotonVer = true;
+							}
+
+							if(($permisos == 1 && intval($lista["estado"]) == 0) || ($_SESSION['requerimientos_usuario'] == $lista['user_create'] && intval($lista["estado"]) == 0))
+							{
+								$mostrarBotonEditar = true;
+							}
+
+							if(($permisos == 1 && intval($lista["estado"]) == 0) || ($_SESSION['requerimientos_usuario'] == $lista['user_create'] && intval($lista["estado"]) == 0))
+							{
+								$mostrarBotonEliminar = true;
+							}
+
 					  	?>
 						<div class="btn-group">
+						<?php
+							if($mostrarBotonVer)
+							{
+						?>
 							<button class="btn btn-default" title="Ver" onclick="requerimientos_cargar_ver(<?php echo $id; ?>)">
 								<span class="fas fa-eye"></span>
 							</button>
-
+						<?php
+							}
+							if($mostrarBotonEditar)
+							{
+						?>
 							<button class="btn btn-default" title="Editar" onclick="requerimientos_cargar_editar(<?php echo $id; ?>)">
 								<span class="glyphicon glyphicon-edit"></span>
 							</button>
-
+						<?php
+							}
+							if($mostrarBotonEliminar)
+							{
+						?>
 							<button class="btn btn-default" title="Eliminar" onclick="requerimientos_eliminar_confirmar(<?php echo $id; ?>)">
 								<span class="fas fa-trash"></span>
 							</button>
+						<?php
+							}
+						?>
 						</div>
 						<?php 
-							}
-							else
+							if(!$mostrarBotonVer && !$mostrarBotonEditar && !$mostrarBotonEliminar)
 							{
 								echo 'No disponible';
 							}

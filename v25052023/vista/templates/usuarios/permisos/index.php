@@ -93,13 +93,13 @@
 							(
 								"1" => 'Administardor',
 								"2" => 'Supervisor Sistemas',
-                                "21" => 'Auxiliar Sistemas',
+                                //"21" => 'Auxiliar Sistemas',
 								"3" => 'Supervisor Campo',
-                                "31" => 'Auxiliar Campo',
+                                //"31" => 'Auxiliar Campo',
                                 "4" => 'Supervisor Puntos de Atención',
-                                "41" => 'Auxiliar Puntos de Atención',
+                                //"41" => 'Auxiliar Puntos de Atención',
 								"5" => 'Supervisor Almacen',
-                                "51" => 'Auxiliar Almacen'								
+                                //"51" => 'Auxiliar Almacen'								
 							);
 
 							$contador = 0;

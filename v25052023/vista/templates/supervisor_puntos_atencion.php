@@ -128,50 +128,7 @@
 
                     <li onclick="inicio()"><a href="javascript: void(0)" class="menu-enfocar"><b><span class="menu-pc-ocultar"><i class="fas fa-home"></i>&nbsp;&nbsp;&nbsp;</span>Inicio</b></a><span class="menu-texto-oculto">Inicio</span></li>
 
-                    <li onclick="//almacen_cargarIndex()"><a href="?v=almacen_index" class="menu-enfocar"><b><span class="menu-pc-ocultar"><i class="fas fa-chart-column"></i>&nbsp;&nbsp;&nbsp;</span>Almacen</b></a><span class="menu-texto-oculto">Almacen</span></li>
-
-                    <li onclick="//articulos_cargarIndex()"><a href="?v=articulos_index" class="menu-enfocar"><b><span class="menu-pc-ocultar"><i class="fas fa-chart-column"></i>&nbsp;&nbsp;&nbsp;</span>Articulos</b></a><span class="menu-texto-oculto">Articulos</span></li>
-
-                    <li onclick="//unidades_cargarIndex()"><a href="?v=unidades_index" class="menu-enfocar"><b><span class="menu-pc-ocultar"><i class="fas fa-chart-column"></i>&nbsp;&nbsp;&nbsp;</span>Unidades</b></a><span class="menu-texto-oculto">Unidades</span></li>
-
-                    <!--<li class="dropdown" style="vertical-align: middle;">
-
-                        <a href="javascript: void(0)" class="dropdown-toggle menu-enfocar" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><b><span class="menu-pc-ocultar"><i class="fas fa-cogs"></i>&nbsp;&nbsp;&nbsp;</span>Transacciones</b></a>
-                        <span class="menu-texto-oculto"><b><span class="menu-pc-ocultar"><i class="fas fa-cogs"></i>&nbsp;&nbsp;&nbsp;</span>Transacciones</b></span>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                            <li onclick="//transacciones_entradas_cargarIndex()"><a href="?v=transacciones_entradas_index"><span class="fas fa-shopping-cart color-iconos"></span>&nbsp;&nbsp;&nbsp;<b>Entradas</b></a></li>
-                            <li onclick="//transacciones_salidas_cargarIndex()"><a href="?v=transacciones_salidas_index"><span class="fas fa-minus color-iconos"></span>&nbsp;&nbsp;&nbsp;<b>Salidas</b></a></li>
-                        </ul>
-                    </li>
-
-                    <li class="dropdown" style="vertical-align: middle;">
-
-                        <a href="javascript: void(0)" class="dropdown-toggle menu-enfocar" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><b><span class="menu-pc-ocultar"><i class="fas fa-cogs"></i>&nbsp;&nbsp;&nbsp;</span>Complementos</b></a>
-                        <span class="menu-texto-oculto"><b><span class="menu-pc-ocultar"><i class="fas fa-cogs"></i>&nbsp;&nbsp;&nbsp;</span>Complementos</b></span>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                            <li onclick="//categorias_cargarIndex()"><a href="?v=categorias_index"><span class="fas fa-filter color-iconos"></span>&nbsp;&nbsp;&nbsp;<b>Categorias</b></a></li>
-                            <li onclick="//unidades_cargarIndex()"><a href="?v=unidades_index"><span class="fas fa-info-circle color-iconos"></span>&nbsp;&nbsp;&nbsp;<b>Unidades</b></a></li>
-                        </ul>
-                    </li>
-
-                    <li class="dropdown" style="vertical-align: middle;">
-
-                        <a href="javascript: void(0)" class="dropdown-toggle menu-enfocar" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><b><span class="menu-pc-ocultar"><i class="fas fa-cogs"></i>&nbsp;&nbsp;&nbsp;</span>Proveedores</b></a>
-                        <span class="menu-texto-oculto"><b><span class="menu-pc-ocultar"><i class="fas fa-cogs"></i>&nbsp;&nbsp;&nbsp;</span>Proveedores</b></span>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                            <li onclick="//proveedor_individual_cargarIndex()"><a href="?v=proveedor_individual_index"><span class="fas fa-user color-iconos"></span>&nbsp;&nbsp;&nbsp;<b>Individual</b></a></li>
-                            <li onclick="//proveedor_empresa_cargarIndex()"><a href="?v=proveedor_empresa_index"><span class="fas fa-building color-iconos"></span>&nbsp;&nbsp;&nbsp;<b>Empresas</b></a></li>
-                        </ul>
-                    </li>-->
-
-                    <li class="dropdown" style="vertical-align: middle;">
-
-                        <a href="javascript: void(0)" class="dropdown-toggle menu-enfocar" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><b><span class="menu-pc-ocultar"><i class="fas fa-cogs"></i>&nbsp;&nbsp;&nbsp;</span>Administrar</b></a>
-                        <span class="menu-texto-oculto"><b><span class="menu-pc-ocultar"><i class="fas fa-cogs"></i>&nbsp;&nbsp;&nbsp;</span>Administrar</b></span>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                            <li onclick="//usuarios_permisos_cargarIndex()"><a href="?v=usuarios_permisos_index"><span class="fas fa-user-gear color-iconos"></span>&nbsp;&nbsp;&nbsp;<b>Permisos</b></a></li>
-                        </ul>
-                    </li>
+                    <li onclick="//requerimientos_cargarIndex()"><a href="?v=requerimientos_index" class="menu-enfocar"><b><span class="menu-pc-ocultar"><i class="fas fa-chart-column"></i>&nbsp;&nbsp;&nbsp;</span>Requerimientos</b></a><span class="menu-texto-oculto">Requerimientos</span></li>
                 </ul>
             </nav>
         </div>

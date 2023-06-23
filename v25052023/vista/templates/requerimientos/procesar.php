@@ -10,17 +10,66 @@
 	</div>
 </div>
 
+<?php
+    if($view_requerimientos->modo == 'almacen')
+    {
+?>
+<hr>
 <div class="row">
-    <div class="form-group col-sm-6">
-        <label><b>Asunto </b></label>
-        <input id="requerimientos-procesar-asunto" type="text" value="<?php echo $view_requerimientos->asunto; ?>" class="form-control" placeholder="Digite el asunto" minlength="1" maxlength="49" readonly>
-    </div>
+	<div class="col-sm-12"><b>Lista de Articulos</b></div>
+</div><br>
+<?php
+		foreach($view_requerimientos->almacen as $lista)
+		{
+?>
+<div class="row">
+	<div class="form-group col-sm-6">
+		<label><b>Articulo </b></label>
+		<input type="text" value="<?php echo $view_requerimientos->articulos['id_'.$lista['articulo']]['nombre']; ?>" class="form-control" readonly>
+	</div>
 
-    <div class="form-group col-sm-6">
-        <label><b>Opción </b></label>
+	<div class="form-group col-sm-6">
+		<label><b>Cantidad </b></label>
+		<input type="text" value="<?php echo $lista['cantidad']; ?>" class="form-control text-center" readonly>
+	</div>
+</div>
+<hr>
+<?php
+		}
+	}
+    else
+    {
+?>
+
+<div class="row">
+    <div class="form-group col-sm-12">
+        <label><b>Asunto </b></label>
         <input id="requerimientos-ver-opcion" type="text" value="<?php echo $view_requerimientos->opcion; ?>" class="form-control" readonly>
     </div>
 </div>
+
+<?php
+	    if($view_requerimientos->opcion == 'COMPUTADOR' || $view_requerimientos->opcion == 'IMPRESORA')
+	    {
+?>
+<div class="row">
+	<div class="form-group col-sm-6">
+		<label><b>Cantidad</b></label>
+		<input id="requerimientos-ver-cantidad" type="text" value="<?php echo $view_requerimientos->cantidad; ?>" class="form-control" readonly>
+	</div>
+
+	<div class="form-group col-sm-6">
+		<label><b>Punto </b></label>
+		<input id="requerimientos-ver-punto" type="text" value="<?php echo $view_requerimientos->punto; ?>" class="form-control" readonly>
+	</div>
+</div>
+<?php
+	    }
+?>
+
+<?php
+    }
+?>
 
 <div class="row">
     <div class="col-sm-12">

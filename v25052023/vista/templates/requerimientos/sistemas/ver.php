@@ -1,7 +1,17 @@
 <?php
     include_once '../../modelo/fecha.php';
+	include_once '../../modelo/usuario.php';
 
     $fecha = new Fecha();
+	$claseUsuario = new Usuario();
+	$usuario = '';
+	$permisos = '';
+
+    if(isset($_SESSION['requerimientos_usuario']))
+    {
+        $usuario = $_SESSION['requerimientos_usuario'];
+        $permisos = intval($claseUsuario->getPermisos($usuario));
+    }
 ?>
 
 <div class="row">
@@ -63,7 +73,7 @@
 <br>
 <center>
 <?php
-	if($view_requerimientos->estado == 0)
+	if(($permisos == 1 && $view_requerimientos->estado == 0) || ($permisos == 2 && $view_requerimientos->estado == 0))
 	{
 ?>
 	<button class="btn btn-danger" onclick="requerimientos_cargar_rechazar(<?php echo $view_requerimientos->id; ?>)">
@@ -71,7 +81,7 @@
 	</button>
 <?php
 	}
-	if($view_requerimientos->estado == 0)
+	if(($permisos == 1 && $view_requerimientos->estado == 0) || ($permisos == 2 && $view_requerimientos->estado == 0))
 	{
 ?>
 	<button class="btn btn-primary" onclick="requerimientos_en_proceso_confirmar(<?php echo $view_requerimientos->id; ?>)">
@@ -79,7 +89,8 @@
 	</button>
 <?php
 	}
-	if($view_requerimientos->estado == 0 || $view_requerimientos->estado == 3)
+	if(($permisos == 1 && $view_requerimientos->estado == 0) || ($permisos == 1 && $view_requerimientos->estado == 3) || ($permisos == 2 && $view_requerimientos->estado == 0)
+		|| ($permisos == 2 && $view_requerimientos->estado == 3))
 	{
 ?>
 	<button class="btn btn-success" onclick="requerimientos_cargar_procesar(<?php echo $view_requerimientos->id; ?>)">

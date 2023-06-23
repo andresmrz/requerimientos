@@ -59,7 +59,7 @@
 					$view_requerimientos->user_create = $requerimientos->getValorId($_POST['id'], 'user_create');
 					$view_requerimientos->fecha = $requerimientos->getValorId($_POST['id'], 'date_create');
 
-					if($permisos == 1)
+					if($permisos == 1 || $permisos == 2 || $permisos == 3 || $permisos == 4 || $permisos == 5)
 					{
 						switch($view_requerimientos->modo)
 						{
@@ -159,8 +159,9 @@
 
 							case 'almacen':
 							{
-								$view_requerimientos->list_opciones = $opciones_sistemas->getData();
+								$view_requerimientos->list_opciones = $articulos->getDataToArray();
 								$view_requerimientos->list_puntos = $usuario->getPuntosCali();
+								$view_requerimientos->data_articulos = $requerimientos->getDataArrayAlmacen($view_requerimientos->id);
 								$template = '../../vista/templates/requerimientos/almacen/editar.php';
 
 								break;
@@ -237,9 +238,14 @@
 					if($permisos == 1 || $permisos == 2 || $permisos == 3 || $permisos == 4 || $permisos == 5)
 					{
 						$view_requerimientos->id = $_POST['id'];
+						$view_requerimientos->modo = $requerimientos->getValorId($_POST['id'], 'destinatario');
 						$view_requerimientos->opcion = $requerimientos->getValorId($_POST['id'], 'opcion');
-						$view_requerimientos->asunto = $requerimientos->getValorId($_POST['id'], 'asunto');
+						$view_requerimientos->cantidad = $requerimientos->getValorId($_POST['id'], 'cantidad');
+						$view_requerimientos->punto = $requerimientos->getValorId($_POST['id'], 'punto');
 						$view_requerimientos->descripcion = $requerimientos->getValorId($_POST['id'], 'descripcion');
+
+						$view_requerimientos->almacen = $requerimientos->getDataAlmacen($view_requerimientos->id);
+						$view_requerimientos->articulos = $articulos->getDataToArray();
 
 						$template = '../../vista/templates/requerimientos/procesar.php';
 					}
@@ -252,9 +258,14 @@
 					if($permisos == 1 || $permisos == 2 || $permisos == 3 || $permisos == 4 || $permisos == 5)
 					{
 						$view_requerimientos->id = $_POST['id'];
+						$view_requerimientos->modo = $requerimientos->getValorId($_POST['id'], 'destinatario');
 						$view_requerimientos->opcion = $requerimientos->getValorId($_POST['id'], 'opcion');
-						$view_requerimientos->asunto = $requerimientos->getValorId($_POST['id'], 'asunto');
+						$view_requerimientos->cantidad = $requerimientos->getValorId($_POST['id'], 'cantidad');
+						$view_requerimientos->punto = $requerimientos->getValorId($_POST['id'], 'punto');
 						$view_requerimientos->descripcion = $requerimientos->getValorId($_POST['id'], 'descripcion');
+
+						$view_requerimientos->almacen = $requerimientos->getDataAlmacen($view_requerimientos->id);
+						$view_requerimientos->articulos = $articulos->getDataToArray();
 
 						$template = '../../vista/templates/requerimientos/rechazar.php';
 					}

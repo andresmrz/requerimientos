@@ -2,18 +2,21 @@
 <?php 
 
 include_once 'conexion/conexion.php';
+include_once 'conexion/conexion_p3.php';
 
 date_default_timezone_set('America/Bogota');
 
 class Requerimientos
 {
     private $conexion;
+    private $conexion_p3;
     private $id_usuario;
     private $fecha_actual;
 
     function __construct()
     {
         $this->conexion = new Conexion();
+        $this->conexion_p3 = new Conexion_p3();
         $this->fecha_actual = date('Y-m-d H:i:s');
 
         if(isset($_SESSION['requerimientos_usuario']))
@@ -141,6 +144,7 @@ class Requerimientos
                         padding: 60px;
                         font-size: 20px;
                         margin-top: 50px;
+                        text-align: left;
                     }
             
                     .mensaje a
@@ -156,7 +160,7 @@ class Requerimientos
                     <div class="contenedor-principal">
                         <div class="logo">
                             <center>
-                                <img src="https://calivirtual.net/images/favicon_v2.jpg" alt="">
+                                <img src="https://calivirtual.net/images/favicon_v2.png" alt="">
                             </center>
                         </div>
             
@@ -168,7 +172,7 @@ class Requerimientos
                             <div class="mensaje">
                                 Hola,
                                 <br><br>
-                                Ha se registro en el portal <a href="https://calivirtual.net/requerimientos" target="_blank">requerimientos</a> la creación de un requerimiento.
+                                Se registro en el portal <a href="https://calivirtual.net/requerimientos" target="_blank">Sisben Requerimientos</a> la creación de un requerimiento.
                                 <br><br>
                                 '.$correo_asunto.'
                                 <b>Descripción: </b> '.$descripcion.'<br>           
@@ -193,12 +197,33 @@ class Requerimientos
         return '0';
     }
 
-    function update($id, $opcion, $cantidad, $punto, $descripcion) // actualiza los valores del dato en la bd
+    function update($id, $opcion, $cantidad, $punto, $descripcion, $modo) // actualiza los valores del dato en la bd
     {
         $cantidad = ((trim($cantidad) == '')?'null':"$cantidad");
 
         $this->conexion->conectar();
-        $this->conexion->ejecutar("UPDATE datos SET opcion = '$opcion', cantidad = $cantidad, punto = '$punto', descripcion = '$descripcion', date_update = '$this->fecha_actual' WHERE id = $id limit 1");
+        
+        if($modo == 'almacen')
+        {
+            $this->conexion->ejecutar("UPDATE datos SET descripcion = '$descripcion', date_update = '$this->fecha_actual' WHERE id = $id limit 1");
+            $this->conexion->ejecutar("DELETE FROM datos_almacen WHERE datos = $id");
+            
+            $datos = explode('**', $opcion);
+
+            for($i = 0;$i < sizeof($datos); $i++)
+            {
+                $valor = explode('++', $datos[$i]);
+                $articulo = $valor[0];
+                $cantidad = $valor[1];
+                $articuloNombre = $valor[2];
+
+                $this->conexion->ejecutar("INSERT INTO datos_almacen(datos, articulo, cantidad) VALUES($id, $articulo, $cantidad)");
+            }
+        }
+        else
+        {
+            $this->conexion->ejecutar("UPDATE datos SET opcion = '$opcion', cantidad = $cantidad, punto = '$punto', descripcion = '$descripcion', date_update = '$this->fecha_actual' WHERE id = $id limit 1");
+        }
 
         $this->conexion->ejecutar("INSERT INTO historial_bd(usuario,detalle,fecha) VALUES($this->id_usuario,'actualizo el requerimiento $id','$this->fecha_actual')");
 
@@ -231,14 +256,25 @@ class Requerimientos
         return '0';
     }
 
-    function procesar($id, $observaciones) // actualiza un dato de la bd
+    function procesar($id, $observaciones, $data_articulos) // actualiza un dato de la bd
     {
         $this->conexion->conectar();
+        $this->conexion_p3->conectar();
+        
         $this->conexion->ejecutar("UPDATE datos set estado = 1, observaciones_solucion = '$observaciones', date_solucion = '$this->fecha_actual' WHERE id = $id limit 1");
+
+        foreach($data_articulos as $lista)
+        {
+            $articulo = $lista['articulo'];
+            $cantidad = intval($lista['cantidad']);
+
+            $this->conexion_p3->ejecutar("UPDATE articulos set cantidad = (cantidad - $cantidad) WHERE id = $articulo limit 1");
+        }
 
         $this->conexion->ejecutar("INSERT INTO historial_bd(usuario,detalle,fecha) VALUES($this->id_usuario,'proceso requerimiento ($id)','$this->fecha_actual')");
 
         $this->conexion->desconectar();
+        $this->conexion_p3->desconectar();
 
         return '0';
     }
@@ -277,6 +313,30 @@ class Requerimientos
         $this->conexion->desconectar();
 
         return $result;
+    }
+
+    function getDataArrayAlmacen($requerimiento) // retorna todos los datos de la bd
+    {
+        $sql = "SELECT * FROM datos_almacen WHERE datos = $requerimiento";
+        $salida = array();
+
+        $this->conexion->conectar();
+        $result = $this->conexion->consultar($sql);
+
+        foreach($result as $lista)
+        {
+            $salida = array_merge($salida, 
+            [
+                [
+                    'articulo' => $lista['articulo'],
+                    'cantidad' => $lista['cantidad']
+                ]
+            ]);
+        }
+
+        $this->conexion->desconectar();
+
+        return json_encode($salida);
     }
 
     function getValorId($id, $valor) // retorna los valores de un dato

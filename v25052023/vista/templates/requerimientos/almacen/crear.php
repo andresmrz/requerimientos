@@ -12,7 +12,7 @@
                 foreach($view_requerimientos->list_opciones as $lista)
                 {
             ?>
-            <option value="<?php echo $lista['id']; ?>" title="<?php echo $lista['nombre']; ?>"><?php echo $lista['nombre']; ?></option>
+            <option value="<?php echo $lista['id']; ?>" title="<?php echo $lista['nombre']; ?>"><?php echo $lista['nombre'].', existencias '.$lista['cantidad']; ?></option>
             <?php 
                 }
             ?>
@@ -34,11 +34,11 @@
 </div>
 
 <center>
-    <button type="button" class="btn btn-danger" onclick="requerimientos_eliminar_articulo()">
+    <button type="button" class="btn btn-danger" onclick="requerimientos_eliminar_articulo('crear')">
         <span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;Eliminar Ultimo
     </button>
 
-    <button type="button" class="btn btn-primary" onclick="requerimientos_agregar_articulo()">
+    <button type="button" class="btn btn-primary" onclick="requerimientos_agregar_articulo('crear')">
         <span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;Agregar Articulo
     </button>
 </center>

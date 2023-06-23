@@ -145,7 +145,11 @@ function requerimientos_cargar_editar(id)
     {
         $('#requerimientos-contenedor-2').load('../../controlador/requerimientos/indexRequerimientos.php',{action:'editar', id:id},function()
         {
-            requerimientos_cambiar_opcion('editar', $('#requerimientos-editar-opcion').val());
+            if(document.getElementById('requerimientos-editar-cantidad'))
+            {
+                requerimientos_cambiar_opcion('editar', $('#requerimientos-editar-opcion').val());
+            }
+
             cambiarSubcontenedor('requerimientos-contenedor', 2);
             verMenu();
 
@@ -177,7 +181,7 @@ function requerimientos_editar(id)
 
     if(modo == 'almacen')
     {
-        var opcion = $('#requerimientos-editar-opcion').val();
+        var opcion = $('#requerimientos-editar-articulo-lista').val();
         var descripcion = $('#requerimientos-editar-descripcion').val();
 
         var parametros = 
@@ -185,6 +189,8 @@ function requerimientos_editar(id)
             action: 'editar',
             id: id,
             opcion: opcion,
+            cantidad: '',
+            punto: '',
             descripcion: descripcion
         };
 
@@ -396,17 +402,41 @@ function requerimientos_cargar_procesar(id, cargar)
 
 function requerimientos_procesar_confirmar(id)
 {
-    var titulo = 'Esta seguro que desea procesar este requerimiento?';
-    var funcion = 'requerimientos_procesar(' + id + ')'; 
-
-    var parametros = 
+    var parametros_verificar = 
     {
-        action: 'ventanaConfirmacion',
-        titulo: titulo,
-        funcion: funcion
+        action: 'verificar_existencias_id',
+        id: id
     };
 
-    mostrarSubventana('PROCESAR REQUERIMIENTO','../../controlador/alertas/indexAlertas.php', parametros);
+    $.ajax(
+    {
+        type: 'POST',
+        url: '../../controlador/requerimientos/controllerRequerimientos.php',
+        data: parametros_verificar,
+        success: function(respuesta)
+        {
+            var response = JSON.parse(respuesta);
+
+            if(response.modo == 0)
+            {
+                var titulo = 'Esta seguro que desea procesar este requerimiento?';
+                var funcion = 'requerimientos_procesar(' + id + ')'; 
+
+                var parametros = 
+                {
+                    action: 'ventanaConfirmacion',
+                    titulo: titulo,
+                    funcion: funcion
+                };
+
+                mostrarSubventana('PROCESAR REQUERIMIENTO','../../controlador/alertas/indexAlertas.php', parametros);
+            }
+            else
+            {
+                mostrarAlerta('MENSAJE DE ERROR','La cantidad ingresada supera la cantidad disponible:<br><br>' + response.mensaje, 2);
+            }
+        }
+    });
 }
 
 function requerimientos_procesar(id)
@@ -502,77 +532,102 @@ function requerimientos_destinatario(valor)
     cargando_done('Cargando datos',true, ejecutar);
 }
 
-function requerimientos_agregar_articulo()
+function requerimientos_agregar_articulo(modo)
 {
-    var subir = false;
-
-    var articuloSelect = document.getElementById('requerimientos-crear-articulo');
-    var articulo = articuloSelect.value;
-    var articuloNombre = articuloSelect.options[articuloSelect.selectedIndex].text;
-    var cantidad = parseInt(document.getElementById('requerimientos-crear-articulo-cantidad').value);
-
-    if(articulo != '')
+    var parametros = 
     {
-        if(!isNaN(cantidad))
+        action: 'verificar_existencias',
+        articulo: document.getElementById('requerimientos-' + modo + '-articulo').value,
+        cantidad: document.getElementById('requerimientos-' + modo + '-articulo-cantidad').value
+    };
+
+    $.ajax(
+    {
+        type: 'POST',
+        url: '../../controlador/requerimientos/controllerRequerimientos.php',
+        data: parametros,
+        success: function(respuesta)
         {
-            if(cantidad > 0)
+            var response = JSON.parse(respuesta);
+
+            if(response.modo == 0)
             {
-                subir = true;
-            }
-        }
-    }
+                var subir = false;
 
-    if(subir)
-    { 
-        if(!requerimientos_verificar_duplicado(articulo))
-        {
-            var articulos = document.getElementById('requerimientos-crear-articulo-lista');
-            var lista_articulos = document.getElementById('requerimientos-crear-articulo-contenedor-lista');
+                var articuloSelect = document.getElementById('requerimientos-' + modo + '-articulo');
+                var articulo = articuloSelect.value;
+                var articuloNombre = articuloSelect.options[articuloSelect.selectedIndex].text;
+                var cantidad = parseInt(document.getElementById('requerimientos-' + modo + '-articulo-cantidad').value);
 
-            var contenido_articulos = articulos.value;
+                if(articulo != '')
+                {
+                    if(!isNaN(cantidad))
+                    {
+                        if(cantidad > 0)
+                        {
+                            subir = true;
+                        }
+                    }
+                }
 
-            if(contenido_articulos != '')
-            {
-                contenido_articulos += '**';
-            }
+                if(subir)
+                { 
+                    if(!requerimientos_verificar_duplicado(articulo, modo))
+                    {
+                        var articulos = document.getElementById('requerimientos-' + modo + '-articulo-lista');
+                        var lista_articulos = document.getElementById('requerimientos-' + modo + '-articulo-contenedor-lista');
 
-            contenido_articulos += articulo + '++' + cantidad + '++' + articuloNombre;
+                        var contenido_articulos = articulos.value;
 
-            articulos.value = contenido_articulos;
+                        if(contenido_articulos != '')
+                        {
+                            contenido_articulos += '**';
+                        }
 
-            var contenido = '<b>Articulo:</b> ' + articuloNombre + '<br><b>Cantidad:</b> ' + cantidad;
+                        contenido_articulos += articulo + '++' + cantidad + '++' + articuloNombre;
 
-            if(lista_articulos.innerHTML.trim() != 'No se han agregado articulos.<br>')
-            {
-                lista_articulos.innerHTML = lista_articulos.innerHTML.trim() + '<br><br>';
+                        articulos.value = contenido_articulos;
+
+                        var contenido = '<b>Articulo:</b> ' + articuloNombre + '<br><b>Cantidad:</b> ' + cantidad;
+
+                        if(lista_articulos.innerHTML.trim() != 'No se han agregado articulos.<br>')
+                        {
+                            lista_articulos.innerHTML = lista_articulos.innerHTML.trim() + '<br><br>';
+                        }
+                        else
+                        {
+                            lista_articulos.innerHTML = '';
+                        }
+
+                        lista_articulos.innerHTML = lista_articulos.innerHTML.trim() + contenido;
+
+                        document.getElementById('requerimientos-' + modo + '-articulo').selectedIndex = 0;
+                        document.getElementById('requerimientos-' + modo + '-articulo-cantidad').value = '1';
+                    }
+                    else
+                    {
+                        mensajeError = 'Ya se encuentra seleccionado este articulo.';
+                        mostrarAlerta('MENSAJE DE ERROR', mensajeError, 2);
+                    }
+                }
+                else
+                {
+                    mensajeError = 'No se ha seleccionado el articulo o completado el campo de cantidad.';
+                    mostrarAlerta('MENSAJE DE ERROR', mensajeError, 2);
+                }
             }
             else
             {
-                lista_articulos.innerHTML = '';
+                mostrarAlerta('MENSAJE DE ERROR','La cantidad ingresada supera la cantidad disponible:<br><br>' + response.mensaje, 2);
             }
-
-            lista_articulos.innerHTML = lista_articulos.innerHTML.trim() + contenido;
-
-            document.getElementById('requerimientos-crear-articulo').selectedIndex = 0;
-            document.getElementById('requerimientos-crear-articulo-cantidad').value = '1';
         }
-        else
-        {
-            mensajeError = 'Ya se encuentra seleccionado este articulo.';
-            mostrarAlerta('MENSAJE DE ERROR', mensajeError, 2);
-        }
-    }
-    else
-    {
-        mensajeError = 'No se ha seleccionado el articulo o completado el campo de cantidad.';
-        mostrarAlerta('MENSAJE DE ERROR', mensajeError, 2);
-    }
+    });
 }
 
-function requerimientos_eliminar_articulo()
+function requerimientos_eliminar_articulo(modo)
 {
-    var articulos = document.getElementById('requerimientos-crear-articulo-lista');
-    var lista_articulos = document.getElementById('requerimientos-crear-articulo-contenedor-lista');
+    var articulos = document.getElementById('requerimientos-' + modo + '-articulo-lista');
+    var lista_articulos = document.getElementById('requerimientos-' + modo + '-articulo-contenedor-lista');
     var contenidoNuevo = '';
     var contenidoNuevoVisual = '';
 
@@ -622,9 +677,29 @@ function requerimientos_eliminar_articulo()
     }
 }
 
-function requerimientos_verificar_duplicado(valor)
+function requerimientos_actualizar_articulo(valor)
 {
-    var articulos_lista = document.getElementById('requerimientos-crear-articulo-lista').value;
+    var datos = JSON.parse(valor);
+    var lista_articulos = document.getElementById('requerimientos-editar-articulo').options;
+
+    for(var i = 0; i < datos.length; i++)
+    {
+        for(var j = 0; j < lista_articulos.length; j++)
+        {
+            if(lista_articulos[j].value == datos[i].articulo)
+            {
+                document.getElementById('requerimientos-editar-articulo').selectedIndex = j;
+                $('#requerimientos-editar-articulo-cantidad').val(datos[i].cantidad);
+
+                requerimientos_agregar_articulo('editar');
+            }
+        }
+    }
+}
+
+function requerimientos_verificar_duplicado(valor, modo)
+{
+    var articulos_lista = document.getElementById('requerimientos-' + modo + '-articulo-lista').value;
     var articulos = articulos_lista.split('**');
     var salida = false;
 
